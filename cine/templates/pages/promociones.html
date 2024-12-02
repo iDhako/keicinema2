@@ -1,0 +1,84 @@
+{% extends "layout/plantillamain.html" %}
+{% load static %}
+
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".dropdown img.flag").addClass("flagvisibility");
+
+        $(".dropdown dt a").click(function() {
+            $(".dropdown dd ul").toggle();
+        });
+                    
+        $(".dropdown dd ul li a").click(function() {
+            var text = $(this).html();
+            $(".dropdown dt a span").html(text);
+            $(".dropdown dd ul").hide();
+            $("#result").html("Selected value is: " + getSelectedValue("sample"));
+        });
+                    
+        function getSelectedValue(id) {
+            return $("#" + id).find("dt a span.value").html();
+        }
+
+        $(document).bind('click', function(e) {
+            var $clicked = $(e.target);
+            if (! $clicked.parents().hasClass("dropdown"))
+                $(".dropdown dd ul").hide();
+        });
+
+
+        $("#flagSwitcher").click(function() {
+            $(".dropdown img.flag").toggleClass("flagvisibility");
+        });
+    });
+ </script>
+
+ <script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css" media="screen" />
+   <script type="text/javascript">
+		$(document).ready(function() {
+
+			$('.fancybox').fancybox();
+
+		});
+	</script>
+{% endblock %}
+
+{% block body %}
+<div class="main">
+    <div class="shop_top">
+        <div class="container">
+            <div class="row shop_box-top">
+                <div class="container-max-width">
+                    <h1>PROMOCIONES <span>KEI CINEMA</span> DISPONIBLES</h1>
+                    <h4>TODAS LAS PROMOCIONES ESTÁN SUJETAS A TÉRMINOS Y CONDICIONES</h4>
+                </div>
+            </div>
+            <div class="row">
+                {% for producto in promociones %}
+                {% if producto.descuento_productos > 0 %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="{% static 'assets/images/promocion.jpg' %}" class="card-img-top" alt="{{ producto.nombre_producto }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre_producto }}</h5>
+                            <p class="card-text">{{ producto.descripcion_producto }}</p>
+                            <p class="card-text"><strong>Precio:</strong> {{ producto.precio_producto }}</p>
+                            <p class="card-text"><strong>Stock:</strong> {{ producto.stock_producto }}</p>
+                            
+                            <p class="card-text text-danger"><strong>Descuento:</strong> {{producto.descuento_productos}}%</p>
+                           
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "layout/plantillamain.html" %}
+{% load static %}
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".dropdown img.flag").addClass("flagvisibility");
+
+        $(".dropdown dt a").click(function() {
+            $(".dropdown dd ul").toggle();
+        });
+                    
+        $(".dropdown dd ul li a").click(function() {
+            var text = $(this).html();
+            $(".dropdown dt a span").html(text);
+            $(".dropdown dd ul").hide();
+            $("#result").html("Selected value is: " + getSelectedValue("sample"));
+        });
+                    
+        function getSelectedValue(id) {
+            return $("#" + id).find("dt a span.value").html();
+        }
+
+        $(document).bind('click', function(e) {
+            var $clicked = $(e.target);
+            if (! $clicked.parents().hasClass("dropdown"))
+                $(".dropdown dd ul").hide();
+        });
+
+
+        $("#flagSwitcher").click(function() {
+            $(".dropdown img.flag").toggleClass("flagvisibility");
+        });
+    });
+ </script>
+{% endblock %}
+{% block body %}
+
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-dark">
+    <div class="card shadow-lg border-0" style="width: 24rem;">
+        <div class="card-header bg-primary text-white text-center py-3">
+            <h2 class="mb-0">Registro</h2>
+        </div>
+        <div class="card-body bg-white p-5">
+            <div class="text-center mb-4">
+                <i class="fas fa-film fa-3x text-primary"></i>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-user text-primary"></i>
+                        </span>
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-envelope text-primary"></i>
+                        </span>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-lock text-primary"></i>
+                        </span>
+                        {{ form.password1}}
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-lock text-primary"></i>
+                        </span>
+                        {{ form.password2}}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-user-plus me-2"></i>Registrarse
+                </button>
+            </form>
+        </div>
+        <div class="card-footer bg-white text-center py-3">
+            <small class="text-muted">¿Ya tienes una cuenta? <a href= '/login' class="text-primary">Inicia sesión</a></small>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

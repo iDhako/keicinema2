@@ -1,0 +1,64 @@
+{% extends "layout/plantillaadmin.html" %}
+{% load static %}
+{% block scriptadm %}
+<script type="text/javascript">
+ </script>
+ <style>
+    .container {
+        margin-top: 50px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .btn {
+        width: 100%;
+    }
+    .movie-list {
+        margin-top: 30px;
+        border-top: 2px solid #ddd;
+        padding-top: 20px;
+    }
+    .movie-item {
+        margin-bottom: 10px;
+    }
+</style>
+
+{% endblock %}
+{% block bodyadm %}
+<div class="container">
+    <h2 class="text-center">Agregar Salas</h2>
+    
+    <!-- Formulario -->
+    <form method='POST' action="{% url 'addsala' %}" id="agregarSalasForm">
+        {% csrf_token %}
+        
+    <!-- Número de Sala -->
+    <div class="mb-3">
+        <label for="numero_sala" class="form-label">Número de Sala</label>
+        <input type="text" class="form-control" id="numero_sala" name="numero_sala" maxlength="2" required>
+    </div>
+
+    <!-- Número de Butaca -->
+    <div class="mb-3">
+        <label for="numero_butaca" class="form-label">Número de Butaca</label>
+        <input type="text" class="form-control" id="numero_butaca" name="numero_butaca" maxlength="2" required>
+    </div>
+
+
+        <!-- Botón para Enviar -->
+        <button type="submit" class="btn btn-primary">Agregar Sala</button>
+    </form>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</script>
+
+
+
+    
+{% endblock %}

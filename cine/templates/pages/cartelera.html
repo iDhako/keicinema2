@@ -1,0 +1,62 @@
+{% extends "layout/plantillamain.html" %}
+{% load static %}
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".dropdown img.flag").addClass("flagvisibility");
+
+        $(".dropdown dt a").click(function() {
+            $(".dropdown dd ul").toggle();
+        });
+                    
+        $(".dropdown dd ul li a").click(function() {
+            var text = $(this).html();
+            $(".dropdown dt a span").html(text);
+            $(".dropdown dd ul").hide();
+            $("#result").html("Selected value is: " + getSelectedValue("sample"));
+        });
+                    
+        function getSelectedValue(id) {
+            return $("#" + id).find("dt a span.value").html();
+        }
+
+        $(document).bind('click', function(e) {
+            var $clicked = $(e.target);
+            if (! $clicked.parents().hasClass("dropdown"))
+                $(".dropdown dd ul").hide();
+        });
+
+
+        $("#flagSwitcher").click(function() {
+            $(".dropdown img.flag").toggleClass("flagvisibility");
+        });
+    });
+ </script>
+{% endblock %}
+{% block body %}
+
+  <div class="main">
+    <div class="shop_top">
+      <div class="container">
+          <div class="row shop_box-top">
+            {% for peliculas in pelicula %}             
+                <div class="col-md-3 shop_box"><a href="{% url 'detalle' id=peliculas.id %}">
+                  <img src={{peliculas.imagen_url}} class="img-responsive" alt=""/>
+                  <div class="shop_desc">
+                      <h3><a href="#">{{peliculas.titulo}}</a></h3>
+                      <p>{{peliculas.fecha_estreno}}<br>{{peliculas.duracion}}</p>
+                      <span class="actual">{{peliculas.valor_peliculas}}</span><br>
+                      <ul class="buttons">
+                          <li class="cart"><a href="#">Add To Cart</a></li>
+                          <li class="shop_btn"><a href="#">Read More</a></li>
+                          <div class="clear"> </div>
+                      </ul>
+                  </div></a>
+                </div>
+            {% endfor %}
+          </div>
+       </div>
+     </div>
+    </div>
+
+{% endblock %}

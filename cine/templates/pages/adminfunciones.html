@@ -1,0 +1,97 @@
+{% extends "layout/plantillaadmin.html" %}
+{% load static %}
+{% block scriptadm %}
+<script type="text/javascript">
+ </script>
+ <style>
+    .container {
+        margin-top: 50px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .btn {
+        width: 100%;
+    }
+    .movie-list {
+        margin-top: 30px;
+        border-top: 2px solid #ddd;
+        padding-top: 20px;
+    }
+    .movie-item {
+        margin-bottom: 10px;
+    }
+</style>
+
+{% endblock %}
+{% block bodyadm %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="container">
+    <h2 class="text-center">Agregar Función</h2>
+    
+    <!-- Formulario -->
+    <form method='POST' action="{% url 'addfunction' %}" id="functionForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="pelicula">Película</label>
+            <select class="form-control" name="pelicula" id="pelicula">
+                <option selected disable>Seleccione una película</option>
+
+                {% for x in peliculas %}
+                    <option value={{x.pk}}>{{x.titulo}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sala">Sala</label>
+            <select class="form-control" name="sala" id="sala">
+                <option selected disable>Seleccione una sala</option>
+                {% for x in sala %}
+
+                    <option value={{x.pk}}>{{x.numero_sala}}</option>
+                {% endfor %}
+
+            </select>
+        </div>
+    <!-- Selección de Fecha -->
+    <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha</label>
+        <input type="date" class="form-control" id="fecha" name="fecha" required>
+    </div>
+
+    <!-- Selección de Hora -->
+    <div class="mb-3">
+        <label for="hora" class="form-label">Hora</label>
+        <input type="time" class="form-control" id="hora" name="hora" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="precio" class="form-label">Precio</label>
+        <input type="number" class="form-control" id="precio" name="precio" required>
+    </div>
+
+        <button type="submit" class="btn btn-primary">Agregar Función</button>
+    </form>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</script>
+
+
+
+    
+{% endblock %}

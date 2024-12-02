@@ -1,0 +1,139 @@
+{% extends "layout/plantillamain.html" %}
+{% load static %}
+
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".dropdown img.flag").addClass("flagvisibility");
+
+        $(".dropdown dt a").click(function() {
+            $(".dropdown dd ul").toggle();
+        });
+                    
+        $(".dropdown dd ul li a").click(function() {
+            var text = $(this).html();
+            $(".dropdown dt a span").html(text);
+            $(".dropdown dd ul").hide();
+            $("#result").html("Selected value is: " + getSelectedValue("sample"));
+        });
+                    
+        function getSelectedValue(id) {
+            return $("#" + id).find("dt a span.value").html();
+        }
+
+        $(document).bind('click', function(e) {
+            var $clicked = $(e.target);
+            if (! $clicked.parents().hasClass("dropdown"))
+                $(".dropdown dd ul").hide();
+        });
+
+
+        $("#flagSwitcher").click(function() {
+            $(".dropdown img.flag").toggleClass("flagvisibility");
+        });
+    });
+ </script>
+
+ <script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css" media="screen" />
+   <script type="text/javascript">
+		$(document).ready(function() {
+
+			$('.fancybox').fancybox();
+
+		});
+	</script>
+{% endblock %}
+
+
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+{% block body %}
+<!-- Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Hero Slider -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static 'assets/images/slider1.jpg' %}" class="d-block w-100 " height="700" alt="Movie Poster 1">
+            <div class="carousel-caption d-none d-md-block">
+                <h1>Bienvenido a KeiCinema</h1>
+                <p>Una experiencia magica para la gran pantalla</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'assets/images/slider2.jpg' %}" class="d-block w-100" height="700" alt="Movie Poster 2">
+            <div class="carousel-caption d-none d-md-block">
+                <h1>Últimos éxitos de taquilla</h1>
+                <p>Mira los lanzamientos más recientes con una calidad sorprendente</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+    </button>
+</div>
+
+<!-- Featured Movies -->
+<section class="featured-movies py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Películas destacadas</h2>
+        <p class="text-center mb-5">Las películas estrella de esta semana</p>
+        <div class="row">
+            <div class="col-6 col-md-4 col-lg-2 mb-4">
+                <img src="{% static 'assets/images/board1.jpg' %}" class="img-fluid rounded" alt="Movie 1">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-4">
+                <img src="{% static 'assets/images/board2.jpg' %}" class="img-fluid rounded" alt="Movie 2">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-4">
+                <img src="{% static 'assets/images/board3.jpg' %}" class="img-fluid rounded" alt="Movie 3">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-4">
+                <img src="{% static 'assets/images/board4.jpg' %}" class="img-fluid rounded" alt="Movie 4">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-4">
+                <img src="{% static 'assets/images/board5.jpg' %}" class="img-fluid rounded" alt="Movie 5">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-4">
+                <img src="{% static 'assets/images/board1.jpg' %}" class="img-fluid rounded" alt="Movie 6">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Promotion -->
+<section class="promotion py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3>Special Promotion</h3>
+                <p class="lead">Palomitas grandes + Bebida a eleccion de 1.5L</p>
+                <p>Oferta valida solo por esta semana</p>
+                <a href="#" class="btn btn-primary">Obtener oferta</a>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'assets/images/combo3.jpg' %}" class="img-fluid rounded" alt="Promotion">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+

@@ -1,0 +1,78 @@
+<div class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header-left">
+                    <div class="logo">
+                        <a href='/'><img src='/static/assets/images/logoo.png' width="80" height="80" alt=""/></a>
+                    </div>
+                    <div class="menu">
+                        <a class="toggleMenu" href="#"><img src='/static/assets/images/nav.png' alt="" /></a>
+                        <ul class="nav" id="nav">
+                            <li><a href='/cartelera'>Cartelera</a></li>
+                            <li><a href='/confiteria'>Confiteria</a></li>
+                            <li><a href='/promociones'>Promociones</a></li>
+                            <li><a href='/contacto'>Contacto</a></li>								
+                            <div class="clear"></div>
+                        </ul>
+                        <script type="text/javascript" src='/static/js/responsive-nav.js'></script>
+                    </div>							
+                    <div class="clear"></div>
+                </div>
+                <div class="header_right">
+                        {% comment %} {% if user.is_authenticated %}
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="img-fluid rounded-circle" style="width: 30px; height: 30px;">
+                        </a>
+                        <ul class="dropdown-menu sub-icon1 list">
+                            <li><a href='profile'>Mi Perfil</a></li>
+                            <li><a href='logout'>Cerrar Sesión</a></li>
+                        </ul>
+                    {% else %} {% endcomment %}
+                    <div class="hstack gap-2 mr-5">
+                        <div class="container">
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-cart4"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                </ul>
+                            </div>
+                        </div>
+                        {% comment %} {% endif %} {% endcomment %}
+                        <div class="container">
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a href='login' style="color: #D3D3D3;">Iniciar Sesión</a></li>
+                                    <li><a href='signup' style="color: #D3D3D3;">Registrarse</a></li> 
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+    <div class="container">
+        {% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+    </div>
+</div>

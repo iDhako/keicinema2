@@ -1,0 +1,176 @@
+{% extends "layout/plantillamain.html" %}
+{% load static %}
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".dropdown img.flag").addClass("flagvisibility");
+
+        $(".dropdown dt a").click(function() {
+            $(".dropdown dd ul").toggle();
+        });
+
+        $(".dropdown dd ul li a").click(function() {
+            var text = $(this).html();
+            $(".dropdown dt a span").html(text);
+            $(".dropdown dd ul").hide();
+            $("#result").html("Selected value is: " + getSelectedValue("sample"));
+        });
+
+        function getSelectedValue(id) {
+            return $("#" + id).find("dt a span.value").html();
+        }
+
+        $(document).bind('click', function(e) {
+            var $clicked = $(e.target);
+            if (! $clicked.parents().hasClass("dropdown"))
+                $(".dropdown dd ul").hide();
+        });
+
+        $("#flagSwitcher").click(function() {
+            $(".dropdown img.flag").toggleClass("flagvisibility");
+        });
+
+        // Manejo de la selección de horario
+        $(".btn-outline-dark").click(function() {
+            var selectedTime = $(this).data("hora"); // Hora seleccionada
+            var funcionId = $(this).data("funcion-id"); // ID de la función seleccionada
+
+            // Actualizar los campos ocultos
+            $("#funcion-id").val(funcionId);
+            $("#selected-time").text(selectedTime);
+
+            // Mostrar el footer con los detalles seleccionados
+            $("#booking-footer").removeClass('d-none').addClass('animate__animated animate__slideInUp');
+        });
+    });
+
+    function closeBookingFooter() {
+        $("#booking-footer").addClass('d-none');
+    }
+
+    function continuarCompra() {
+        var selectedDate = $("#selected-date").text();
+        var selectedTime = $("#selected-time").text();
+        var movieId = $("#movie-id").val();
+
+        // Aquí puedes agregar la lógica para procesar la compra
+        window.location.href = `/procesar-compra/${movieId}?fecha=${selectedDate}&hora=${selectedTime}`;
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <!-- Trailer Section -->
+    <div class="position-relative mb-4" style="height: 400px;">
+        <iframe height="400px" src="{{pelicula.trailer_url}}" title="trailer {{pelicula.titulo}}" class="w-100 h-100 object-fit-cover" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <div class="row">
+
+        <!-- Poster -->
+        <div class="col-md-4 mb-4">
+            <img src="{{pelicula.imagen_url}}" alt=" img {{pelicula.titulo}} " class="img-fluid shadow">
+        </div>
+
+        <!-- Movie Details -->
+        <div class="col-md-8">
+            <h1 class="mb-3">{{pelicula.titulo}}</h1>
+            
+            <div class="mb-4">
+                <h2 class="h4 mb-2">Título Original</h2>
+                <p>{{pelicula.titulo_original}}</p>
+            </div>
+            
+            <div class="mb-4">
+                <h2 class="h4 mb-2">Director</h2>
+                <p>{{pelicula.director}}</p>
+            </div>
+            
+            <div class="mb-4">
+                <h2 class="h4 mb-2">Reparto</h2>
+                <p>{{pelicula.reparto}}</p>
+            </div>
+            
+            <div class="mb-4">
+                <h2 class="h4 mb-2">Sinopsis</h2>
+                <p class="text-justify">{{pelicula.sinopsis}}</p>
+            </div>
+
+            <!-- Horarios -->
+            <div class="mb-4">
+                <h2 class="h4 mb-3">Horarios Disponibles</h2>
+                <div class="d-flex gap-4 mb-3">
+                    {% for dia, horarios in funciones_por_dia.items %}
+                    <div class="text-center">
+                        <div class="fw-bold">{{ dia|date:"D" | upper }}</div> <!-- Día en texto -->
+                        <div class="small">{{ dia }}</div> <!-- Fecha completa -->
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Cine -->
+            <div>
+                {% for dia, horarios in funciones_por_dia.items %}
+                <div class="mb-4">
+                    <h5 class="mb-2">Funciones para {{ dia }}</h5>
+                    <div class="d-flex gap-2">
+                        {% for horario in horarios %}
+                            <button 
+                                class="btn btn-outline-dark" 
+                                data-funcion-id="{{ horario.id }}" 
+                                data-hora="{{ horario.hora|time:"H:i" }}">
+                                {{ horario.hora|time:"H:i" }}
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Formulario de compra oculto -->
+<div id="booking-footer" class="position-fixed bottom-0 start-0 w-100 d-none" style="background-color: rgba(0, 0, 0, 0.95); z-index: 1050;">
+    <form action="{% url 'compras' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="funcion_id" id="funcion-id">
+        <div class="container-fluid px-4 py-3">
+            <div class="row align-items-center">
+                <!-- Información de la película -->
+                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                    <h2 class="text-white h4 mb-1">{{pelicula.titulo}}</h2>
+                    <p class="text-white-50 mb-0">{{pelicula.cine}}</p>
+                    <div class="d-flex gap-2 mt-2">
+                        {% for formato in pelicula.formatos %}
+                        <span class="badge bg-secondary">{{formato}}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Fecha y hora seleccionada -->
+                <div class="col-12 col-md-4 mb-3 mb-md-0 text-center">
+                    <div class="text-white h5 mb-1" id="selected-date"></div>
+                    <div class="text-white h4" id="selected-time"></div>
+                </div>
+
+                <!-- Botones -->
+                <div class="col-12 col-md-4 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary px-4" onclick="closeBookingFooter()">
+                        VOLVER
+                    </button>
+                    <button type="submit" class="btn btn-danger px-4">
+                        CONTINUAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% include "../widget/shopBanner.html" %}
+   
+{% endblock %}

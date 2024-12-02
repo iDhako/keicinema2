@@ -1,0 +1,111 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        // ... (código existente) ...
+    
+        // Manejo de la selección de horario
+        $(".btn-outline-dark").click(function() {
+            var selectedTime = $(this).text().trim();
+            var selectedDate = $(this).closest('.mb-4').find('h5').text().replace('Funciones para ', '');
+            var movieId = $("#movie-id").val();
+            var selectedTime = $(this).data("hora"); // Hora seleccionada
+            var funcionId = $(this).data("funcion-id"); // ID de la función seleccionada
+    
+            // Actualizar los campos ocultos
+            $("#funcion-id").val(funcionId);
+            $("#selected-time").text(selectedTime);
+    
+            // Mostrar el banner con los detalles seleccionados
+            $("#booking-footer").removeClass('d-none').addClass('animate__animated animate__slideInUp');
+            // Formatear la fecha para mostrar como en el diseño (ej: SÁB. 23 NOV. 2024)
+            var date = new Date(selectedDate);
+            var days = ['DOM.', 'LUN.', 'MAR.', 'MIÉ.', 'JUE.', 'VIE.', 'SÁB.'];
+            var months = ['ENE.', 'FEB.', 'MAR.', 'ABR.', 'MAY.', 'JUN.', 'JUL.', 'AGO.', 'SEP.', 'OCT.', 'NOV.', 'DIC.'];
+            
+            var formattedDate = `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    
+            $("#selected-date").text(formattedDate);
+            $("#selected-time").text(selectedTime);
+            $("#booking-footer").removeClass('d-none').addClass('animate__animated animate__slideInUp');
+        });
+    });
+    
+    function closeBookingFooter() {
+        $("#booking-footer").addClass('d-none');
+    }
+    
+    function continuarCompra() {
+        var selectedDate = $("#selected-date").text();
+        var selectedTime = $("#selected-time").text();
+        var movieId = $("#movie-id").val();
+    
+        // Aquí puedes agregar la lógica para procesar la compra
+        window.location.href = `/procesar-compra/${movieId}?fecha=${selectedDate}&hora=${selectedTime}`;
+    }
+    </script>
+    
+    <style>
+    /* Animaciones */
+    .animate__animated {
+        animation-duration: 0.3s;
+    }
+    
+    .animate__slideInUp {
+        animation-name: slideInUp;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+    
+    /* Estilos adicionales */
+    .btn {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    .badge {
+        font-weight: 500;
+        padding: 0.5em 1em;
+    }
+    </style>
+<div id="booking-footer" class="position-fixed bottom-0 start-0 w-100 d-none" style="background-color: rgba(0, 0, 0, 0.95); z-index: 1050;">
+    <form action="{% url 'compras' %}">
+        {% csrf_token %}
+        <input type="hidden" name="funcion_id" id="funcion-id">
+        <div class="container-fluid px-4 py-3">
+            <div class="row align-items-center">
+                <!-- Información de la película -->
+                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                    <h2 class="text-white h4 mb-1">{{pelicula.titulo}}</h2>
+                    <p class="text-white-50 mb-0">{{pelicula.cine}}</p>
+                    <div class="d-flex gap-2 mt-2">
+                        {% for formato in pelicula.formatos %}
+                        <span class="badge bg-secondary">{{formato}}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Fecha y hora seleccionada -->
+                <div class="col-12 col-md-4 mb-3 mb-md-0 text-center">
+                    <div class="text-white h5 mb-1" id="selected-date"></div>
+                    <div class="text-white h4" id="selected-time"></div>
+                </div>
+
+                <!-- Botones -->
+                <div class="col-12 col-md-4 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary px-4" onclick="closeBookingFooter()">
+                        VOLVER
+                    </button>
+                    <button type="submit" class="btn btn-danger px-4">
+                        CONTINUAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
